@@ -106,9 +106,9 @@ public class LoginFilter implements Filter {
 ### ❓ @WebFilter 어노테이션
 
 **어노테이션을 이용하여 web.xml을 사용하지 않고도 자동으로 필터 등록이 가능하다.**    
-	- Filter 등록을 위한 Annotation
-	- Servlet 3.0 이상 사용 가능
-	- 톰캣 7이상에서 사용 가능
+ - Filter 등록을 위한 Annotation
+ - Servlet 3.0 이상 사용 가능
+ - 톰캣 7이상에서 사용 가능
 	
 	
 	
