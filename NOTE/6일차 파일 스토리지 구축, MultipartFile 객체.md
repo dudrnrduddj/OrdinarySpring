@@ -64,7 +64,7 @@ private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletReques
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); // 포맷 정해주기
 	String resultStr = sdf.format(new Date(System.currentTimeMillis())); // 현재시각 날짜 객체로 생성 및 format에 맞춰 만들기
 	String ext = fileName.substring(fileName.lastIndexOf(".")+1); // 해당이름의 .확장자 부분 떼어주기
-	String fileRename = resultStr + "." + ext; // 새로운 이름 완성
+	String fileRename = resultStr + "." + ext; // 새로운 이름 완성 (떼어냈던 확장자 붙여주기)
 	
 	String saveFile = filePath + "\\" + fileRename; // 저장파일 경로 완성
 	File file = new File(saveFile); // 파일 객체 생성
@@ -140,4 +140,41 @@ private Map<String, Object> saveFile(MultipartFile uploadFile, HttpServletReques
 **이는 탐캣이 배포할 때 사용하던 경로에 저장되기 때문이다.**     
 *(이클립스에 의해 자동으로 동작함)*     
 
-**경로를 바꿔주기 위해 OverView 탭의 Serve modules without publishing 옵션을 체크해준다.**    
+**경로를 바꿔주기 위해 OverView 탭의 Serve modules without publishing 옵션을 체크해준다.**       
+
+-----------------------------------------------
+
+## 첨부된 파일 확인 (다운로드도 가능하게) 및 수정하기
+
+**1. a태그의 download 속성**   
+jsp에서   
+```
+<a href="/resources/bUploadFiles/${board.boardFileRename}" download>${board.boardFilename}</a>
+```   
+ - a태그의 download속성을 넣어주어 다운이 가능하도록 함     
+
+**2. update.jsp에서 파일첨부 수정**
+```
+<form action="/board/update.kh" method="post" enctype="multipart/form-data"> // mulitpart 추가!!
+
+...
+
+<c:if test=${not empty board.boardFilename}">
+	<span><a href="../resources/bUploadFiles/${board.boardFileRename}">${board.boardFilename}</a></span>
+</c:if>
+<input type="file" name="reloadFile">
+```
+ - 컨트롤러로부터 board를 넘겨받을 때 첨부파일에대한 정보가 없을 경우 기존의 파일 정보가 나오도록 추가       
+ - input태그를 통해 새로 덮어씌울 파일타입의 input태그의 name을 reloadFile로 지정      
+   
+```
+<input type="hidden" name="boardFileName" value="${board.boardFileName }">
+<input type="hidden" name="boardFileReName" value="${board.boardFileReName }">
+<input type="hidden" name="boardFilePath" value="${board.boardFilePath }">
+<input type="hidden" name="boardFileLength" value="${board.boardFileLength }">
+```
+ - request시에 넘겨줄 값(기존detail.jsp에서 갖고 있던 board데이터)들을 hidden타입의 input태그로 지정
+
+
+
+
